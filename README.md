@@ -1,0 +1,7 @@
+# KMCL (Kazu Minecraft Launcher)
+
+## NO WARRANTY
+
+## UNDER CONSTRUCTION
+
+## USE AT YOUR OWN RISK

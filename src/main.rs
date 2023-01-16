@@ -61,7 +61,13 @@ fn main() {
             .leaf("Quit", |s| s.quit()),
     );
 
-    siv.add_layer(Dialog::text("Hello!").content(SelectView::<String>::new().with_name("select")));
+    //Instance list
+    let instance_list = SelectView::new()
+        .item("Short", "aa")
+        .item("Medium", "aa")
+        .item("Long", "aa");
+
+    siv.add_layer(Dialog::around(instance_list).title("Instances"));
 
     siv.add_global_callback(Key::Esc, |s| s.select_menubar());
 

@@ -49,7 +49,7 @@ fn main() {
                           }
                           Some(EventResult::Consumed(None))
                       })
-                      .fixed_size((s.screen_size().x / 2, s.screen_size().y / 2)),
+                      .fixed_size((48, 12)),
               ))
               .title(format!("About KMCL v{}", env!("CARGO_PKG_VERSION")))
               .h_align(HAlign::Center)
@@ -59,16 +59,31 @@ fn main() {
             )
             })
             .leaf("Quit", |s| s.quit()),
-    );
+    ).add_subtree(
+      "Instance",
+      menu::Tree::new()
+          .leaf(
+              "View folder",
+              |s| {
+                if let Err(error) = open::that("instances") {
+                  s.add_layer(
+                    Dialog::around(TextView::new(format!("Failed to open instance folder: {}", error)))
+                      .title("Error")
+                      .button("OK", |s| { s.pop_layer(); }),
+                  );
+                }
+              },
+          )
+        );
 
     //Instance list
     let mut instance_list = SelectView::new();
-    instance_list.add_item("a", "aa");
+    instance_list.add_item("🥝a", "aa");
     instance_list.add_item("b", "aa");
     instance_list.add_item("c", "aa");
 
     siv.add_layer(
-        Dialog::around(instance_list.scrollable()).title("Instances"),
+        Dialog::around(instance_list.scrollable().fixed_size((24, 12))).title("Instances"),
     );
 
     siv.add_global_callback(Key::Esc, |s| s.select_menubar());

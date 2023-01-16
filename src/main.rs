@@ -2,7 +2,7 @@ use cursive::{
     align::HAlign,
     event::{EventResult, Key},
     menu,
-    view::{scroll::Scroller, Nameable, Resizable, Scrollable},
+    view::{scroll::Scroller, Resizable, Scrollable},
     views::{Dialog, OnEventView, Panel, SelectView, TextView},
     With,
 };
@@ -51,7 +51,7 @@ fn main() {
                       })
                       .fixed_size((s.screen_size().x / 2, s.screen_size().y / 2)),
               ))
-              .title("About KMCL")
+              .title(format!("About KMCL v{}", env!("CARGO_PKG_VERSION")))
               .h_align(HAlign::Center)
               .button("Close", |s| {
                 s.pop_layer();
@@ -62,12 +62,14 @@ fn main() {
     );
 
     //Instance list
-    let instance_list = SelectView::new()
-        .item("Short", "aa")
-        .item("Medium", "aa")
-        .item("Long", "aa");
+    let mut instance_list = SelectView::new();
+    instance_list.add_item("a", "aa");
+    instance_list.add_item("b", "aa");
+    instance_list.add_item("c", "aa");
 
-    siv.add_layer(Dialog::around(instance_list).title("Instances"));
+    siv.add_layer(
+        Dialog::around(instance_list.scrollable()).title("Instances"),
+    );
 
     siv.add_global_callback(Key::Esc, |s| s.select_menubar());
 

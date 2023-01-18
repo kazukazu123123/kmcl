@@ -2,15 +2,51 @@ use cursive::{
     align::HAlign,
     event::{EventResult, Key},
     menu,
-    view::{scroll::Scroller, Resizable, Scrollable},
-    views::{Dialog, OnEventView, Panel, SelectView, TextView},
-    With,
+    view::{scroll::Scroller, Nameable, Resizable, Scrollable},
+    views::{Button, Dialog, EditView, LinearLayout, OnEventView, Panel, SelectView, TextView},
+    Cursive, With,
 };
+
+use std::{env, fs};
+
+mod instance;
 
 fn main() {
     const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
+    let current_path = env::current_dir();
 
     println!("[KMCL v{}] Starting...", APP_VERSION);
+
+    if !instance::directory_exist() {
+        println!(
+            "[KMCL v{}] Instances directory does not exist. creating.",
+            APP_VERSION
+        );
+
+        match current_path {
+            Ok(mut path) => {
+                path.push("instances");
+                match fs::create_dir(path) {
+                    Ok(()) => println!(
+                        "[KMCL v{}] Instances directory created succesfully.",
+                        APP_VERSION
+                    ),
+                    Err(err) => println!("ERR: {}", err),
+                }
+            }
+            Err(err) => println!(
+                "[KMCL v{}] [ERROR] Failed to get current directory: {}",
+                APP_VERSION, err
+            ),
+        }
+    }
+
+    println!(
+        "[KMCL v{}] Test2: {}.",
+        APP_VERSION,
+        instance::get_instance("aa")
+    );
+
     println!("[KMCL v{}] OK.", APP_VERSION);
 
     let mut siv = cursive::default();
@@ -70,7 +106,7 @@ fn main() {
               },
           )
           .leaf("New Instance", |s| {
-              s.add_layer(Dialog::info("New instance!").title("New Instance"))
+              new_instance(s);
           })
           .leaf("Edit Instance", |s| {
               s.add_layer(Dialog::info("Edit instance!").title("Edit Instance"))
@@ -78,15 +114,64 @@ fn main() {
         );
 
     //Instance list
-    let mut instance_list: SelectView<&str> = SelectView::new();
-    instance_list.add_item("a", "aa");
-    instance_list.add_item("b", "bb");
+    let instance_list = SelectView::<String>::new()
+        .on_submit(instance_action)
+        .with_name("instance_list");
 
     siv.add_layer(
-        Dialog::around(instance_list.scrollable().fixed_size((48, 12))).title("Instances"),
+        Dialog::around(instance_list.scrollable().fixed_size((40, 15))).title("Instances"),
     );
+
+    for n in 1..21 {
+        siv.call_on_name("instance_list", |view: &mut SelectView<String>| {
+            view.add_item_str(format!("a{}", n));
+        });
+    }
 
     siv.add_global_callback(Key::Esc, |s| s.select_menubar());
 
     siv.run();
+}
+
+fn instance_action(s: &mut Cursive, name: &str) {
+    s.add_layer(
+        Dialog::around(
+            LinearLayout::vertical()
+                .child(Button::new("Play", |s| {
+                    s.pop_layer();
+                }))
+                .child(Button::new("Close", |s| {
+                    s.pop_layer();
+                })),
+        )
+        .title(name),
+    );
+}
+
+fn new_instance(s: &mut Cursive) {
+    fn ok(s: &mut Cursive, name: &str) {
+        s.call_on_name("instance_list", |view: &mut SelectView<String>| {
+            view.add_item_str(name)
+        });
+        s.pop_layer();
+    }
+
+    s.add_layer(
+        Dialog::around(
+            EditView::new()
+                .on_submit(ok)
+                .with_name("new_instance_name")
+                .fixed_width(10),
+        )
+        .title("New Instance")
+        .button("Ok", |s| {
+            let name = s
+                .call_on_name("new_instance_name", |view: &mut EditView| view.get_content())
+                .unwrap();
+            ok(s, &name);
+        })
+        .button("Cancel", |s| {
+            s.pop_layer();
+        }),
+    );
 }

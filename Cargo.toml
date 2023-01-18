@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 cursive = { version = "=0.20.0", default-features = false, features = ["crossterm-backend"] }
 open = "=3.2.0"
+toml = "0.5.10"

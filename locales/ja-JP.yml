@@ -1,0 +1,8 @@
+menu:
+  file:
+    title: ファイル
+    quit:
+      title: 終了
+  instance:
+    title: インスタンス
+    view_folder: フォルダーを表示

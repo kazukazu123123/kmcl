@@ -1,0 +1,8 @@
+menu:
+  file:
+    title: File
+    quit:
+      title: Quit
+  instance:
+    title: Instance
+    view_folder: View folder

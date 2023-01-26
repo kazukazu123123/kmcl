@@ -7,7 +7,11 @@ edition = "2021"
 
 [dependencies]
 cursive = { version = "=0.20.0", default-features = false, features = ["crossterm-backend"] }
+dunce = "=1.0.3"
+once_cell = "=1.17.0"
 open = "=3.2.0"
+rust-i18n = "=1"
 serde = "=1.0.152"
 serde_derive = "=1.0.152"
+indoc = "=1"
 toml = "=0.6.0"

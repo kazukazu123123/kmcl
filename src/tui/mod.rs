@@ -15,7 +15,8 @@ pub fn run() {
         fs::create_dir(instance.as_path()).unwrap();
     }
 
-    rust_i18n::set_locale("ja-JP");
+    let app_version = env!("CARGO_PKG_VERSION");
+
 
     match instance::create_instance("test123", "1.7.10", GameType::Vanilla) {
         Ok(inst) => {
@@ -27,6 +28,8 @@ pub fn run() {
     }
 
     let mut siv = cursive::default();
+
+    siv.set_window_title(format!("KMCL - v{}", app_version));
 
     siv.set_autohide_menu(false);
 
@@ -87,6 +90,8 @@ pub fn run() {
                     };
                 }),
         );
+
+    //Instance list
 
     siv.add_global_callback(event::Key::Esc, |s| s.select_menubar());
 

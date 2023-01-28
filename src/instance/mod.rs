@@ -1,5 +1,4 @@
-use serde::Deserialize;
-use serde_derive::Serialize;
+use serde_derive::{Serialize, Deserialize};
 use std::{env, fs, io::{self, ErrorKind, Error}, path::PathBuf};
 
 #[derive(Deserialize, Serialize, Debug)]

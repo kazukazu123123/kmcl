@@ -30,10 +30,10 @@ pub fn get_all_instances() {}
 
 pub fn get_instance(name: &str) -> io::Result<Instance> {
     let instance_name = name;
-    let mut instance_config_path = get_instance_dir()?;
-    instance_config_path.push(instance_name);
-    instance_config_path.push("instance.toml");
-    let instance_content = fs::read_to_string(instance_config_path)?;
+    let mut instance_path = get_instance_dir()?;
+    instance_path.push(instance_name);
+    instance_path.push("instance.toml");
+    let instance_content = fs::read_to_string(instance_path)?;
     let instance: Instance = match toml::from_str(&instance_content) {
         Ok(instance) => instance,
         Err(e) => return Err(Error::new(ErrorKind::InvalidData, e.message())),
@@ -67,4 +67,4 @@ pub fn create_instance(name: &str, version: &str, kind: GameType) -> io::Result<
     Ok(instance)
 }
 
-fn delete_instance() {}
+fn delete_instance(name: &str) {}

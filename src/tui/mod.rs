@@ -5,7 +5,7 @@ use cursive::{
     views::{Dialog, TextView},
 };
 
-use crate::instance::{self, GameType};
+use crate::instance;
 use indoc::formatdoc;
 use rust_i18n::t;
 
@@ -18,13 +18,13 @@ pub fn run() {
     let app_version = env!("CARGO_PKG_VERSION");
 
 
-    match instance::create_instance("test123", "1.7.10", GameType::Vanilla) {
+    match instance::get_instance("test123") {
         Ok(inst) => {
             println!("{:?}", inst);
             println!("Name: {}", inst.name);
             println!("Version: {}", inst.version);
         }
-        Err(e) => eprintln!("Failed to create instance: {}", e),
+        Err(e) => eprintln!("Failed to get instance: {}", e),
     }
 
     let mut siv = cursive::default();

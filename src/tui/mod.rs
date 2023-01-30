@@ -2,7 +2,9 @@ use std::fs;
 
 use cursive::{
     event, menu,
-    views::{Dialog, TextView},
+    view::{Nameable, Resizable, Scrollable},
+    views::{Dialog, SelectView, TextView},
+    Cursive,
 };
 
 use crate::instance;

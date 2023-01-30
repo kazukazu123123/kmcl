@@ -21,14 +21,14 @@ pub fn run() {
 
     let app_version = env!("CARGO_PKG_VERSION");
 
-    match instance::get_instance("test123") {
+    /*match instance::get_instance("test123") {
         Ok(inst) => {
             println!("{:?}", inst);
             println!("Name: {}", inst.name);
             println!("Version: {}", inst.version);
         }
         Err(e) => eprintln!("Failed to get instance: {}", e),
-    }
+    }*/
 
     let mut siv = cursive::default();
 

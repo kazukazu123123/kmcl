@@ -11,6 +11,8 @@ use crate::instance;
 use indoc::formatdoc;
 use rust_i18n::t;
 
+const BEL: char = '\u{07}';
+
 pub fn run() {
     if !instance::directory_exist().unwrap() {
         let instance = instance::get_instance_dir().unwrap();

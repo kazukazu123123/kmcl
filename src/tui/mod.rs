@@ -85,6 +85,8 @@ pub fn run() {
         view.add_item_str("test123");
     });
 
+fn on_submit(s: &mut Cursive, name: &str) {
+    match instance::get_instance(name) {
                         Ok(instance) => s.add_layer(
                             Dialog::around(TextView::new(formatdoc!(
                                 "
@@ -93,24 +95,22 @@ pub fn run() {
                                 instance.name,
                                 instance.version
                             )))
-                            .title("Instance info")
-                            .dismiss_button("Close"),
+            .title(t!("dialog.instance_info.title"))
+            .dismiss_button(t!("dialog.button.close")),
                         ),
-                        Err(e) => s.add_layer(
-                            Dialog::around(TextView::new(format!(
-                                "Failed to get instance: {}",
+        Err(e) => {
+            s.add_layer(
+                Dialog::around(TextView::new(formatdoc!(
+                    "
+                Failed to get instance {}:
+                {}",
+                    name,
                                 e.to_string()
                             )))
-                            .title("Error")
-                            .dismiss_button("OK"),
-                        ),
+                .title(t!("dialog.error.title"))
+                .dismiss_button(t!("dialog.button.ok")),
+            );
+            println!("{}", BEL);
+        }
                     };
-                }),
-        );
-
-    //Instance list
-
-    siv.add_global_callback(event::Key::Esc, |s| s.select_menubar());
-
-    siv.run();
 }

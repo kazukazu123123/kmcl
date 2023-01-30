@@ -1,5 +1,9 @@
-use serde_derive::{Serialize, Deserialize};
-use std::{env, fs, io::{self, ErrorKind, Error}, path::PathBuf};
+use serde_derive::{Deserialize, Serialize};
+use std::{
+    env, fs,
+    io::{self, Error, ErrorKind},
+    path::PathBuf,
+};
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Instance {

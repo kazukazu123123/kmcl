@@ -56,7 +56,7 @@ pub fn run() {
                         };
                     }
                     Err(e) => {
-                        println!("{}", 0x07);
+                        println!("{}", BEL);
                         s.add_layer(
                             Dialog::around(TextView::new(format!(
                                 "Failed to get instance directory: {}",

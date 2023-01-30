@@ -107,6 +107,7 @@ fn on_submit(s: &mut Cursive, name: &str) {
             .dismiss_button(t!("dialog.button.close")),
         ),
         Err(e) => {
+            println!("{}", BEL);
             s.add_layer(
                 Dialog::around(TextView::new(formatdoc!(
                     "
@@ -118,7 +119,6 @@ fn on_submit(s: &mut Cursive, name: &str) {
                 .title(t!("dialog.error.title"))
                 .dismiss_button(t!("dialog.button.ok")),
             );
-            println!("{}", BEL);
         }
     };
 }

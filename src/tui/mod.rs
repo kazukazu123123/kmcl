@@ -45,33 +45,31 @@ pub fn run() {
         )
         .add_subtree(
             t!("menu.instance.title"),
-            menu::Tree::new()
-                .leaf(
-                    t!("menu.instance.view_folder"),
-                    |s| match instance::get_instance_dir() {
+            menu::Tree::new().leaf(t!("menu.instance.view_folder"), |s| {
+                match instance::get_instance_dir() {
                         Ok(instance) => {
                             if let Err(e) = open::that(instance) {
                                 s.add_layer(
                                     Dialog::around(TextView::new(format!("Error: {}", e)))
                                         .title("Failed to open instance directory.")
-                                        .dismiss_button("OK"),
+                                    .dismiss_button(t!("dialog.button.close")),
                                 );
                             };
                         }
                         Err(e) => {
+                        println!("{}", 0x07);
                             s.add_layer(
                                 Dialog::around(TextView::new(format!(
                                     "Failed to get instance directory: {}",
                                     e
                                 )))
-                                .title("Error")
-                                .dismiss_button("OK"),
+                            .title(t!("dialog.error.title"))
+                            .dismiss_button(t!("dialog.button.close")),
                             );
                         }
-                    },
-                )
-                .leaf("test", |s| {
-                    match instance::get_instance("test123") {
+                }
+            }),
+        );
                         Ok(instance) => s.add_layer(
                             Dialog::around(TextView::new(formatdoc!(
                                 "

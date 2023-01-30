@@ -6,3 +6,11 @@ menu:
   instance:
     title: Instance
     view_folder: View folder
+
+dialog:
+  close_button:
+    title: Close
+  instance_list:
+    title: Instance list
+  instance_info:
+    title: Instance info

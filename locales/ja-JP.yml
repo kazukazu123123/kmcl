@@ -6,3 +6,14 @@ menu:
   instance:
     title: インスタンス
     view_folder: フォルダーを表示
+
+dialog:
+  button:
+    ok: OK
+    close: 閉じる
+  error:
+    title: エラー
+  instance_list:
+    title: インスタンスの一覧
+  instance_info:
+    title: インスタンスの情報

@@ -1,0 +1,19 @@
+menu:
+  file:
+    title: びよ～ん
+    quit:
+      title: びよ
+  instance:
+    title: びよ～んびよ
+    view_folder: びよ～んを表示
+
+dialog:
+  button:
+    ok: びっよ～
+    close: びよ～ん
+  error:
+    title: びよよ！？！？
+  instance_list:
+    title: びよ～んの一覧
+  instance_info:
+    title: びよ～んの情報

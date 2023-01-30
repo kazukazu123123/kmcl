@@ -70,6 +70,21 @@ pub fn run() {
                 }
             }),
         );
+
+    //Instance list
+    let instance_list = SelectView::<String>::new()
+        .on_submit(on_submit)
+        .with_name("instance_list")
+        .scrollable();
+
+    siv.add_layer(
+        Dialog::around(instance_list.fixed_size((50, 15))).title(t!("dialog.instance_list.title")),
+    );
+
+    siv.call_on_name("instance_list", |view: &mut SelectView<String>| {
+        view.add_item_str("test123");
+    });
+
                         Ok(instance) => s.add_layer(
                             Dialog::around(TextView::new(formatdoc!(
                                 "

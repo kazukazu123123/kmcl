@@ -72,7 +72,7 @@ pub fn run() {
 
     //Instance list
     let instance_list = SelectView::<String>::new()
-        .on_submit(on_submit)
+        .on_submit(instance_list_on_submit)
         .with_name("instance_list")
         .scrollable();
 
@@ -93,7 +93,7 @@ pub fn run() {
     siv.run();
 }
 
-fn on_submit(s: &mut Cursive, name: &str) {
+fn instance_list_on_submit(s: &mut Cursive, name: &str) {
     match instance::get_instance(name) {
         Ok(instance) => s.add_layer(
             Dialog::around(TextView::new(formatdoc!(
@@ -111,8 +111,8 @@ fn on_submit(s: &mut Cursive, name: &str) {
             s.add_layer(
                 Dialog::around(TextView::new(formatdoc!(
                     "
-                Failed to get instance {}:
-                {}",
+                    Failed to get instance {}:
+                    {}",
                     name,
                     e.to_string()
                 )))

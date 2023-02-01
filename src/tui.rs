@@ -11,7 +11,7 @@ use crate::instance;
 use indoc::formatdoc;
 use rust_i18n::t;
 
-const BEL: char = '\u{07}';
+const BEL: char = '\x07';
 
 pub fn run() {
     if !instance::directory_exist().unwrap() {

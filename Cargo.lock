@@ -374,7 +374,6 @@ dependencies = [
  "cursive",
  "dunce",
  "indoc",
- "itertools",
  "once_cell",
  "open",
  "rust-i18n",

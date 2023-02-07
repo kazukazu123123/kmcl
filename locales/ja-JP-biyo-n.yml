@@ -5,7 +5,9 @@ menu:
       title: びよ
   instance:
     title: びよ～んびよ
-    view_folder: びよ～んを表示
+    view_folder: びよ～んびをびよ
+    create_instance: びよ～んびよをびよ
+    refresh_instance_list: びよ～んびよのびよをびよ
 
 dialog:
   button:

@@ -6,6 +6,8 @@ menu:
   instance:
     title: インスタンス
     view_folder: フォルダーを表示
+    create_instance: インスタンスを作成
+    refresh_instance_list: インスタンスの一覧を更新
 
 dialog:
   button:

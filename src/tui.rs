@@ -4,7 +4,7 @@ use cursive::{
     event, menu,
     view::{Nameable, Resizable, Scrollable},
     views::{Dialog, SelectView, TextView},
-    Cursive,
+    Cursive, CursiveRunnable,
 };
 
 use crate::instance;
@@ -32,7 +32,7 @@ pub fn run() {
 
     let mut siv = cursive::default();
 
-    siv.set_window_title(format!("KMCL - v{}", app_version));
+    siv.set_window_title(format!("KMCL - v{app_version}"));
 
     siv.set_autohide_menu(false);
 
@@ -49,7 +49,7 @@ pub fn run() {
                     Ok(instance) => {
                         if let Err(e) = open::that(instance) {
                             s.add_layer(
-                                Dialog::around(TextView::new(format!("Error: {}", e)))
+                                Dialog::around(TextView::new(format!("Error: {e}")))
                                     .title("Failed to open instance directory.")
                                     .dismiss_button(t!("dialog.button.close")),
                             );
@@ -59,8 +59,7 @@ pub fn run() {
                         println!("{}", BEL);
                         s.add_layer(
                             Dialog::around(TextView::new(format!(
-                                "Failed to get instance directory: {}",
-                                e
+                                "Failed to get instance directory: {e}"
                             )))
                             .title(t!("dialog.error.title"))
                             .dismiss_button(t!("dialog.button.close")),
@@ -80,13 +79,7 @@ pub fn run() {
         Dialog::around(instance_list.fixed_size((50, 15))).title(t!("dialog.instance_list.title")),
     );
 
-    siv.call_on_name("instance_list", |view: &mut SelectView<String>| {
-        view.add_item_str("test123");
-    });
-
-    siv.call_on_name("instance_list", |view: &mut SelectView<String>| {
-        view.add_item_str("aaaa");
-    });
+    refresh_instance_list(&mut siv);
 
     siv.add_global_callback(event::Key::Esc, |s| s.select_menubar());
 
@@ -111,14 +104,40 @@ fn instance_list_on_submit(s: &mut Cursive, name: &str) {
             s.add_layer(
                 Dialog::around(TextView::new(formatdoc!(
                     "
-                    Failed to get instance {}:
-                    {}",
-                    name,
-                    e.to_string()
+                    Failed to get instance {name}:
+                    {e}"
                 )))
                 .title(t!("dialog.error.title"))
                 .dismiss_button(t!("dialog.button.ok")),
             );
         }
     };
+}
+
+fn refresh_instance_list(siv: &mut CursiveRunnable) {
+    match instance::get_all_instances() {
+        Ok((instances, errors)) => {
+            instances.iter().for_each(|instance| {
+                siv.call_on_name("instance_list", |view: &mut SelectView<String>| {
+                    view.add_item_str(&instance.name);
+                });
+            });
+            errors.iter().for_each(|error| {
+                println!("{}", error);
+            });
+        }
+        Err(err) => {
+            println!("{}", BEL);
+            siv.add_layer(
+                Dialog::around(TextView::new(formatdoc!(
+                    "
+                    Failed to get instance list:
+                    {}",
+                    err
+                )))
+                .title(t!("dialog.error.title"))
+                .dismiss_button(t!("dialog.button.ok")),
+            );
+        }
+    }
 }

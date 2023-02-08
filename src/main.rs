@@ -10,6 +10,7 @@ fn main() {
         let instance = instance::get_instance_dir().unwrap();
         fs::create_dir(instance.as_path()).unwrap();
     }
+
     rust_i18n::set_locale("ja-JP");
     tui::run();
 }

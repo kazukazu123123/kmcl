@@ -4,7 +4,7 @@ use cursive::{
     event, menu,
     view::{Nameable, Resizable, Scrollable},
     views::{Dialog, SelectView, TextView},
-    Cursive, CursiveRunnable,
+    Cursive,
 };
 
 use crate::instance;
@@ -44,29 +44,37 @@ pub fn run() {
         )
         .add_subtree(
             t!("menu.instance.title"),
-            menu::Tree::new().leaf(t!("menu.instance.view_folder"), |s| {
-                match instance::get_instance_dir() {
-                    Ok(instance) => {
-                        if let Err(e) = open::that(instance) {
+            menu::Tree::new()
+                .leaf(
+                    t!("menu.instance.view_folder"),
+                    |s| match instance::get_instance_dir() {
+                        Ok(instance) => {
+                            if let Err(e) = open::that(instance) {
+                                println!("{}", BEL);
+                                s.add_layer(
+                                    Dialog::around(TextView::new(format!("Error: {e}")))
+                                        .title("Failed to open instance directory.")
+                                        .dismiss_button(t!("dialog.button.close")),
+                                );
+                            };
+                        }
+                        Err(e) => {
+                            println!("{}", BEL);
                             s.add_layer(
-                                Dialog::around(TextView::new(format!("Error: {e}")))
-                                    .title("Failed to open instance directory.")
-                                    .dismiss_button(t!("dialog.button.close")),
+                                Dialog::around(TextView::new(format!(
+                                    "Failed to get instance directory: {e}"
+                                )))
+                                .title(t!("dialog.error.title"))
+                                .dismiss_button(t!("dialog.button.close")),
                             );
-                        };
-                    }
-                    Err(e) => {
-                        println!("{}", BEL);
-                        s.add_layer(
-                            Dialog::around(TextView::new(format!(
-                                "Failed to get instance directory: {e}"
-                            )))
-                            .title(t!("dialog.error.title"))
-                            .dismiss_button(t!("dialog.button.close")),
-                        );
-                    }
-                }
-            }),
+                        }
+                    },
+                )
+                .delimiter()
+                .leaf(t!("menu.instance.create_instance"), Cursive::noop)
+                .leaf(t!("menu.instance.refresh_instance_list"), |s| {
+                    refresh_instance_list(s);
+                }),
         );
 
     //Instance list
@@ -114,9 +122,12 @@ fn instance_list_on_submit(s: &mut Cursive, name: &str) {
     };
 }
 
-fn refresh_instance_list(siv: &mut CursiveRunnable) {
+fn refresh_instance_list(siv: &mut Cursive) {
     match instance::get_all_instances() {
         Ok((instances, errors)) => {
+            siv.call_on_name("instance_list", |view: &mut SelectView<String>| {
+                view.clear();
+            });
             instances.iter().for_each(|instance| {
                 siv.call_on_name("instance_list", |view: &mut SelectView<String>| {
                     view.add_item_str(&instance.name);

@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:js-app",
+    "config:base",
     ":rebaseStalePrs",
     ":disableRateLimiting",
     ":maintainLockFilesWeekly",
@@ -9,5 +9,13 @@
     ":assignAndReview(kazukazu123123)",
     ":semanticCommits",
     ":disablePrControls"
+  ],
+  "packageRules": [
+    {
+      "matchPackagePatterns": [
+        "*"
+      ],
+      "rangeStrategy": "pin"
+    }
   ]
 }

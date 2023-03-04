@@ -43,7 +43,7 @@ pub fn get_all_instances() -> Result<(Vec<Instance>, Vec<Error>), std::io::Error
         let instance_name = instance_name.file_name();
         let instance: Instance = match toml::from_str(&instance_config) {
             Ok(instance) => instance,
-            Err(e) => return Err(Error::new(ErrorKind::InvalidData, format!("Failed to parse instance {}: {}", instance_name.unwrap().to_str().unwrap(), e.message()))),
+            Err(e) => return Err(Error::new(ErrorKind::InvalidData, format!("Failed to parse instance {}\n\n{}", instance_name.unwrap().to_str().unwrap(), e))),
         };
         Ok(instance)
     })

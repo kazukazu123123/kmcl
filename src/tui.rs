@@ -76,7 +76,6 @@ pub fn run() {
                     refresh_instance_list(s);
                 }),
         );
-
     //Instance list
     let instance_list = SelectView::<String>::new()
         .on_submit(instance_list_on_submit)
@@ -133,8 +132,15 @@ fn refresh_instance_list(siv: &mut Cursive) {
                     view.add_item_str(&instance.name);
                 });
             });
+            if errors.len() > 0 {
+                println!("{}", BEL);
+            };
             errors.iter().for_each(|error| {
-                println!("{}", error);
+                siv.add_layer(
+                    Dialog::around(TextView::new(format!("{}", error)))
+                    .title(t!("dialog.error.title"))
+                    .dismiss_button(t!("dialog.button.close")),
+                )
             });
         }
         Err(err) => {
